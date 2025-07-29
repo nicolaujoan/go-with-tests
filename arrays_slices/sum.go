@@ -8,6 +8,7 @@ func Sum(numbers []int) int {
 	return sum
 }
 
+// why creating empty slice without make function does not work ?
 func SumAll(numbersToSum... []int) []int {
 	lengthOfNumbers := len(numbersToSum)
 	sums := make([]int, lengthOfNumbers)

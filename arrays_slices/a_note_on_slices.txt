@@ -1,0 +1,76 @@
+// why creating empty slice without make function does not work ?
+
+func SumAll(numbersToSum... []int) []int {
+
+    lengthOfNumbers := len(numbersToSum)
+
+    sums := make([]int, lengthOfNumbers)
+
+
+
+    for i, numbers := range numbersToSum {
+
+        sums[i] = Sum(numbers)
+
+    }
+
+    return sums
+
+}
+
+
+That approach doesn't work because creating a slice with var sums []int results in a nil slice, 
+which has a length and capacity of 0. When you then try to assign a value to an index like sums[i], 
+you're trying to access a memory location that hasn't been allocated, causing a runtime panic
+
+The Problem: Index Out of Range
+When you declare a slice without make or an initial value, you get a nil slice.
+
+var sums []int
+// At this point, sums is nil.
+// len(sums) is 0
+// cap(sums) is 0
+
+Your code then enters a loop and immediately tries to assign a value to an index:
+
+// On the first loop (i=0), this line runs:
+sums[0] = Sum(numbers) // 💥 PANIC!
+
+This fails because index 0 does not exist in a slice of length 0. 
+It's like trying to put something on the 5th shelf when the bookshelf only has a base and no shelves. 
+This results in the classic Go error: panic: runtime error: index out of range.
+
+Why make Solves This
+The make function allocates and initializes the underlying array for the slice, 
+giving it a specified length and capacity.
+
+// If len(numbersToSum) is 3...
+sums := make([]int, 3)
+// sums is now `[0, 0, 0]`
+// len(sums) is 3
+// cap(sums) is 3
+
+Because make creates a slice that is already three elements long (initialized to their zero value, 
+which is 0 for int), the indices 0, 1, and 2 are all valid. Your loop can now safely assign values 
+to sums[0], sums[1], and sums[2] without causing a panic.
+
+The append Alternative
+If you don't want to pre-allocate memory with make, the idiomatic Go way to build a slice dynamically is 
+with the append function. append handles the complexity of growing the slice's underlying array as needed.
+
+Your function could be rewritten like this:
+
+func SumAll(numbersToSum... []int) []int {
+    var sums []int // Create a nil slice, which is fine to start with.
+    
+    for _, numbers := range numbersToSum {
+        // Append the result of Sum(numbers) to the sums slice.
+        // Go handles allocating memory behind the scenes.
+        sums = append(sums, Sum(numbers))
+    }
+    return sums
+}
+
+In short: Use make when you know the final size of the slice ahead of time. 
+Use append when you need to build a slice dynamically by adding elements one by one.
+
