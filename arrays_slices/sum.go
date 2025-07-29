@@ -52,3 +52,5 @@ func SumAllTailsFixed(numbersToSum ...[]int) []int {
 	}
 	return sums
 }
+
+//TODO: Add more tests
