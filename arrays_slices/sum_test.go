@@ -1,6 +1,17 @@
 package main
 
-import "testing"
+import (
+	"testing"
+	"reflect"
+)
+
+/*
+(From Go 1.21, slices standard package is available, which has slices.
+Equal function to do a simple shallow compare on slices, 
+where you don't need to worry about the types like the above case. 
+Note that this function expects the elements to be comparable. 
+So, it can't be applied to slices with non-comparable elements like 2D slices.)
+*/
 
 func TestSum(t *testing.T) {
 
@@ -11,6 +22,29 @@ func TestSum(t *testing.T) {
 		want := 6
 
 		if got != want {
+			t.Errorf("got %d want %d given, %v", got, want, numbers)
+		}
+	})
+
+	t.Run("Sum all, takes a varying number of slices, returning a new slice containing the totals for each slice passed in. 2*2", func(t *testing.T) {
+		numbers := []int{1,2}
+		numbers2 := []int{0,9}
+
+		got := SumAll(numbers, numbers2)
+		want := []int{3, 9}
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %d want %d given, %v", got, want, numbers)
+		}
+	})
+
+	t.Run("Sum all, takes a varying number of slices, returning a new slice containing the totals for each slice passed in. 2*2", func(t *testing.T) {
+		numbers := []int{1, 1, 1}
+
+		got := SumAll(numbers)
+		want := []int{3}
+
+		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got %d want %d given, %v", got, want, numbers)
 		}
 	})
