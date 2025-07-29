@@ -44,7 +44,7 @@ func SumAllTailsFixed(numbersToSum ...[]int) []int {
 	sums := make([]int, len(numbersToSum))
 	for i, numbers := range numbersToSum {
 		if len(numbers) == 0 {
-			sums = append(sums, 0)
+			sums[i] = 0
 		} else {
 			tail := numbers[1:]
 			sums[i] = Sum(tail)
