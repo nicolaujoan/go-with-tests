@@ -30,7 +30,7 @@ func TestSum(t *testing.T) {
 		numbers := []int{1,2}
 		numbers2 := []int{0,9}
 
-		got := SumAll(numbers, numbers2)
+		got := SumAllFixed(numbers, numbers2)
 		want := []int{3, 9}
 
 		if !reflect.DeepEqual(got, want) {
@@ -41,7 +41,7 @@ func TestSum(t *testing.T) {
 	t.Run("Sum all, takes a varying number of slices, returning a new slice containing the totals for each slice passed in. 2*2", func(t *testing.T) {
 		numbers := []int{1, 1, 1}
 
-		got := SumAll(numbers)
+		got := SumAllDynamic(numbers)
 		want := []int{3}
 
 		if !reflect.DeepEqual(got, want) {
